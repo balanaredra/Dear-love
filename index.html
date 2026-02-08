@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Will You Marry Me? ❤️</title>
     <style>
-        /* RESET & BASICS */
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
@@ -19,11 +18,10 @@
             align-items: center;
             font-family: 'Arial', sans-serif;
             overflow: hidden;
-            /* ROMANTIC GRADIENT BACKGROUND */
             background: linear-gradient(135deg, #ff4d4d 0%, #ff9a9e 25%, #fbc2eb 50%, #a18cd1 75%, #ff4d4d 100%);
             background-size: 400% 400%;
             animation: gradientBG 10s ease infinite;
-            touch-action: manipulation; /* Improves touch response */
+            touch-action: manipulation;
         }
 
         @keyframes gradientBG {
@@ -40,21 +38,19 @@
             padding: 20px;
         }
 
-        /* IMAGE STYLING */
         .img-container img {
             width: 85%;
-            max-width: 300px; /* Limits size on big screens */
+            max-width: 300px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
             margin-bottom: 20px;
-            transition: opacity 0.8s ease-in-out; /* Smooth fade effect */
+            /* FAST FADE: Reduced to 0.5s for instant feel */
+            transition: opacity 0.5s ease-in-out; 
             opacity: 1;
         }
 
-        /* TEXT STYLING */
         h1 {
             color: #ffffff;
-            /* Responsive text size */
             font-size: clamp(1.5rem, 7vw, 2.2rem);
             margin-bottom: 30px;
             text-shadow: 2px 2px 10px rgba(194, 24, 91, 0.8);
@@ -63,7 +59,6 @@
             padding: 0 10px;
         }
 
-        /* BUTTONS */
         .buttons {
             display: flex;
             flex-direction: column;
@@ -94,14 +89,13 @@
             will-change: transform;
         }
 
-        /* THE PINK SPREAD ANIMATION */
         .spread-effect {
             position: fixed !important;
             top: 50% !important;
             left: 50% !important;
             border-radius: 50% !important; 
             transform: translate(-50%, -50%) scale(500) !important; 
-            transition: transform 1.25s cubic-bezier(0.4, 0, 0.2, 1); /* Fast Spread */
+            transition: transform 1.25s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 100;
             color: transparent !important;
         }
@@ -124,7 +118,6 @@
             padding: 0 20px;
         }
 
-        /* HEARTS ANIMATION */
         .heart {
             position: fixed;
             color: #ffffff;
@@ -144,9 +137,14 @@
 </head>
 <body>
 
+    <div style="display:none">
+        <img src="img2.png" alt="preload1">
+        <img src="img3.png" alt="preload2">
+    </div>
+
     <div class="container">
         <div class="img-container">
-            <img id="mainImage" src="img1.png" alt="Proposal Scene">
+            <img id="mainImage" src="img1.png" alt="Proposal">
         </div>
         
         <h1 id="mainTitle">Will you marry me? 💍</h1>
@@ -164,11 +162,9 @@
     </audio>
 
     <script>
-        // --- CONFIGURATION ---
         const img1 = "img1.png"; 
         const img2 = "img2.png"; 
         const img3 = "img3.png"; 
-        // ---------------------
 
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
@@ -178,23 +174,16 @@
         const audio = document.getElementById('bgMusic');
 
         let messages = [
-            "Are you sure? 🥺",
-            "Think again! 🧐",
-            "We are perfect together! 👩‍❤️‍👨",
-            "Don't break my heart! 💔",
-            "Pretty please? 🥺",
-            "Just say YES! ❤️",
-            "You're my favorite! 🌟",
-            "I won't give up! 💪",
-            "Almost there... 😉",
-            "Please? 😢"
+            "Are you sure? 🥺", "Think again! 🧐", "We are perfect together! 👩‍❤️‍👨", 
+            "Don't break my heart! 💔", "Pretty please? 🥺", "Just say YES! ❤️", 
+            "You're my favorite! 🌟", "I won't give up! 💪", "Almost there... 😉", "Please? 😢"
         ];
 
         let clickCount = 0;
         let noScale = 1.0;
         let yesScale = 1.0;
 
-        // --- NO BUTTON LOGIC ---
+        // NO Button Logic
         noBtn.addEventListener('click', (e) => {
             e.preventDefault();
             clickCount++;
@@ -212,64 +201,50 @@
             yesBtn.style.transform = `scale(${yesScale})`;
         });
 
-        // --- YES BUTTON LOGIC ---
+        // YES Button Logic
         yesBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            audio.play().catch(e => console.log("Audio waiting for interaction"));
 
-            // 1. Play Audio (Robust Method)
-            var playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    console.log("Audio playing");
-                })
-                .catch(error => {
-                    console.log("Autoplay prevented. Audio will not play.");
-                });
-            }
-
-            // 2. Start Visual Animation
             yesBtn.innerHTML = ""; 
             yesBtn.classList.add("spread-effect");
 
-            // Hide other elements
             noBtn.style.display = 'none';
             convinceMsg.style.display = 'none';
             mainTitle.style.opacity = 0; 
 
-            // 3. WAIT 1.25s (Spread Time), THEN SHOW RING
+            // 1. Reveal Ring after spread (1.25s)
             setTimeout(() => {
                 mainImage.src = img2;
                 mainTitle.innerHTML = "I promise to love you always... 💍";
                 mainTitle.style.opacity = 1; 
 
-                // Fade out the pink button layer
                 yesBtn.style.transition = "opacity 0.3s ease";
                 yesBtn.style.opacity = 0;
 
-                // 4. WAIT 5.5s, THEN SHOW HUG
+                // 2. Wait 5.5s (Ring Display), then Swap to Hug
                 setTimeout(() => {
-                    // Fade out Ring
+                    // Quick fade out
                     mainImage.style.opacity = 0; 
 
-                    // Swap to Hug Image
+                    // Swap & Fade In (0.5s later)
                     setTimeout(() => {
                         mainImage.src = img3;
                         mainImage.style.opacity = 1; 
                         mainTitle.innerHTML = "I Love You Forever! ❤️";
                         
-                        // Start Hearts
-                        setInterval(createHeart, 80);
-                    }, 800); 
+                        // START HEARTS IMMEDIATELY HERE
+                        setInterval(createHeart, 50); 
+                    }, 500); 
 
-                }, 5500); // 5.5 Seconds Display Time
+                }, 5500); 
 
-            }, 1250); // 1.25 Seconds Spread Time
+            }, 1250); 
         });
 
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            // Randomly choose Red or White hearts
             heart.innerHTML = Math.random() > 0.5 ? '❤️' : '🤍';
             heart.style.left = Math.random() * 100 + "vw";
             heart.style.fontSize = (Math.random() * 15 + 15) + "px";
