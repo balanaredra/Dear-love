@@ -44,7 +44,6 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
             margin-bottom: 20px;
-            /* FAST FADE: Reduced to 0.5s for instant feel */
             transition: opacity 0.5s ease-in-out; 
             opacity: 1;
         }
@@ -183,7 +182,6 @@
         let noScale = 1.0;
         let yesScale = 1.0;
 
-        // NO Button Logic
         noBtn.addEventListener('click', (e) => {
             e.preventDefault();
             clickCount++;
@@ -201,7 +199,6 @@
             yesBtn.style.transform = `scale(${yesScale})`;
         });
 
-        // YES Button Logic
         yesBtn.addEventListener('click', (e) => {
             e.preventDefault();
             audio.play().catch(e => console.log("Audio waiting for interaction"));
@@ -222,19 +219,17 @@
                 yesBtn.style.transition = "opacity 0.3s ease";
                 yesBtn.style.opacity = 0;
 
+                // HEARTS START NOW - Right when img2 appears
+                setInterval(createHeart, 60); 
+
                 // 2. Wait 5.5s (Ring Display), then Swap to Hug
                 setTimeout(() => {
-                    // Quick fade out
                     mainImage.style.opacity = 0; 
 
-                    // Swap & Fade In (0.5s later)
                     setTimeout(() => {
                         mainImage.src = img3;
                         mainImage.style.opacity = 1; 
                         mainTitle.innerHTML = "I Love You Forever! ❤️";
-                        
-                        // START HEARTS IMMEDIATELY HERE
-                        setInterval(createHeart, 50); 
                     }, 500); 
 
                 }, 5500); 
